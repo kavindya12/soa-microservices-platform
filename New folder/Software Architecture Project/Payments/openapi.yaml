@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: Payments Service API
+  version: 1.0.0
+  description: API for processing payments.
+servers:
+  - url: http://localhost:3001
+    description: Local Payments Service
+paths:
+  /:
+    get:
+      summary: Get service status
+      responses:
+        '200':
+          description: Payments Service API is running.
+  /payments/{orderId}:
+    get:
+      summary: Get payment details by Order ID
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+          required: true
+          description: The ID of the order for which to retrieve payment details.
+      responses:
+        '200':
+          description: Payment details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment details not found for this order.
+        '500':
+          description: Internal Server Error.
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Unique identifier of the associated order.
+        paymentId:
+          type: string
+          description: Unique identifier for the payment transaction.
+        amount:
+          type: number
+          format: float
+          description: Amount of the payment.
+        status:
+          type: string
+          description: Current status of the payment (e.g., pending, completed, failed).
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment record was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the payment record was last updated.
+      required:
+        - orderId
+        - paymentId
+        - amount
+        - status

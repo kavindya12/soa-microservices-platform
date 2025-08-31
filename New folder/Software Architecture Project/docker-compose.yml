@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  orders:
+    build: ./Orders
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - orders-db
+    networks:
+      - app-network
+
+  payments:
+    build: ./Payments
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - payments-db
+    networks:
+      - app-network
+
+  shipping:
+    build: ./Shipping
+    ports:
+      - "3002:3002"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - shipping-db
+    networks:
+      - app-network
+
+  orchestrator:
+    build: ./Orchestrator
+    ports:
+      - "3003:3003"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  catalog:
+    build: ./CatalogService
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  orders-db:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    volumes:
+      - orders-db-data:/data/db
+    networks:
+      - app-network
+
+  payments-db:
+    image: mongo:4.4
+    ports:
+      - "27018:27017"
+    volumes:
+      - payments-db-data:/data/db
+    networks:
+      - app-network
+
+  shipping-db:
+    image: mongo:4.4
+    ports:
+      - "27019:27017"
+    volumes:
+      - shipping-db-data:/data/db
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+volumes:
+  orders-db-data:
+  payments-db-data:
+  shipping-db-data:
+
+networks:
+  app-network:

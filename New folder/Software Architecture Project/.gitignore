@@ -1,0 +1,27 @@
+# Node.js
+node_modules/
+npm-debug.log
+.env
+
+# Java / Maven
+target/
+.classpath
+.project
+.settings/
+*.log
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+.idea/
+.vscode/
+
+# Docker
+*.log
+!docker-compose.yml
+!Dockerfile
+
+# OS-specific
+.DS_Store
+Thumbs.db

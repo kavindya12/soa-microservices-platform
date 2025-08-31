@@ -1,0 +1,207 @@
+<definitions name="CatalogService"
+             targetNamespace="http://catalog.globalbooks/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://catalog.globalbooks/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <types>
+        <xsd:schema targetNamespace="http://catalog.globalbooks/">
+            <xsd:element name="product" type="tns:product"/>
+            <xsd:complexType name="product">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="name" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="price" type="xsd:double"/>
+                    <xsd:element name="quantity" type="xsd:int"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="addProduct">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="arg0" type="tns:product" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="addProductResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="getProduct">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="arg0" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="getProductResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="tns:product" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="getAllProducts">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="getAllProductsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="tns:product" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="updateProduct">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="arg0" type="tns:product" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="updateProductResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="deleteProduct">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="arg0" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="deleteProductResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="return" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+        </xsd:schema>
+    </types>
+
+    <message name="addProduct">
+        <part name="parameters" element="tns:addProduct"/>
+    </message>
+    <message name="addProductResponse">
+        <part name="parameters" element="tns:addProductResponse"/>
+    </message>
+
+    <message name="getProduct">
+        <part name="parameters" element="tns:getProduct"/>
+    </message>
+    <message name="getProductResponse">
+        <part name="parameters" element="tns:getProductResponse"/>
+    </message>
+
+    <message name="getAllProducts">
+        <part name="parameters" element="tns:getAllProducts"/>
+    </message>
+    <message name="getAllProductsResponse">
+        <part name="parameters" element="tns:getAllProductsResponse"/>
+    </message>
+
+    <message name="updateProduct">
+        <part name="parameters" element="tns:updateProduct"/>
+    </message>
+    <message name="updateProductResponse">
+        <part name="parameters" element="tns:updateProductResponse"/>
+    </message>
+
+    <message name="deleteProduct">
+        <part name="parameters" element="tns:deleteProduct"/>
+    </message>
+    <message name="deleteProductResponse">
+        <part name="parameters" element="tns:deleteProductResponse"/>
+    </message>
+
+    <portType name="CatalogService">
+        <operation name="addProduct">
+            <input message="tns:addProduct"/>
+            <output message="tns:addProductResponse"/>
+        </operation>
+        <operation name="getProduct">
+            <input message="tns:getProduct"/>
+            <output message="tns:getProductResponse"/>
+        </operation>
+        <operation name="getAllProducts">
+            <input message="tns:getAllProducts"/>
+            <output message="tns:getAllProductsResponse"/>
+        </operation>
+        <operation name="updateProduct">
+            <input message="tns:updateProduct"/>
+            <output message="tns:updateProductResponse"/>
+        </operation>
+        <operation name="deleteProduct">
+            <input message="tns:deleteProduct"/>
+            <output message="tns:deleteProductResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="CatalogServiceImplPortBinding" type="tns:CatalogService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="addProduct">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="getProduct">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="getAllProducts">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="updateProduct">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="deleteProduct">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="CatalogService">
+        <port name="CatalogServiceImplPort" binding="tns:CatalogServiceImplPortBinding">
+            <soap:address location="http://localhost:8080/CatalogService/CatalogService"/>
+        </port>
+    </service>
+</definitions>

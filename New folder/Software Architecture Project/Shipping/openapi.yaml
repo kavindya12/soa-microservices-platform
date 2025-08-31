@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Shipping Service API
+  version: 1.0.0
+  description: API for managing shipping operations.
+servers:
+  - url: http://localhost:3002
+    description: Local Shipping Service
+paths:
+  /:
+    get:
+      summary: Get service status
+      responses:
+        '200':
+          description: Shipping Service API is running.
+  /shipping/{orderId}:
+    get:
+      summary: Get shipping details by Order ID
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+          required: true
+          description: The ID of the order for which to retrieve shipping details.
+      responses:
+        '200':
+          description: Shipping details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipping'
+        '404':
+          description: Shipping details not found for this order.
+        '500':
+          description: Internal Server Error.
+components:
+  schemas:
+    Shipping:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Unique identifier of the associated order.
+        shippingId:
+          type: string
+          description: Unique identifier for the shipping transaction.
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            zipCode:
+              type: string
+          required:
+            - street
+            - city
+            - zipCode
+        status:
+          type: string
+          description: Current status of the shipping (e.g., pending, shipped, delivered).
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the shipping record was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the shipping record was last updated.
+      required:
+        - orderId
+        - shippingId
+        - address
+        - status

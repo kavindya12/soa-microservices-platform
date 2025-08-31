@@ -1,0 +1,166 @@
+openapi: 3.0.0
+info:
+  title: Orchestrator Service API
+  version: 1.0.0
+  description: API for orchestrating the order workflow.
+servers:
+  - url: http://localhost:3003
+    description: Local Orchestrator Service
+paths:
+  /:
+    get:
+      summary: Get service status
+      responses:
+        '200':
+          description: Orchestrator Service API is running.
+  /place-order:
+    post:
+      summary: Initiate an order workflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Unique identifier for the order.
+                item:
+                  type: string
+                  description: Name of the item ordered.
+                quantity:
+                  type: integer
+                  description: Quantity of the item.
+                customerName:
+                  type: string
+                  description: Name of the customer.
+                shippingAddress:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+                    city:
+                      type: string
+                    zipCode:
+                      type: string
+                  required:
+                    - street
+                    - city
+                    - zipCode
+              required:
+                - id
+                - item
+                - quantity
+                - customerName
+                - shippingAddress
+      responses:
+        '200':
+          description: Order initiation request sent to orchestrator.
+        '500':
+          description: Orchestrator failed to connect to RabbitMQ.
+  /workflow-status/{orderId}:
+    get:
+      summary: Get complete workflow status for an order
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+          required: true
+          description: The ID of the order to retrieve the workflow status for.
+      responses:
+        '200':
+          description: Aggregated workflow status including order, payment, and shipping details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowStatus'
+        '500':
+          description: Internal Server Error.
+components:
+  schemas:
+    OrderSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        item:
+          type: string
+        quantity:
+          type: integer
+        customerName:
+          type: string
+        shippingAddress:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            zipCode:
+              type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PaymentSummary:
+      type: object
+      properties:
+        orderId:
+          type: string
+        paymentId:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ShippingSummary:
+      type: object
+      properties:
+        orderId:
+          type: string
+        shippingId:
+          type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            zipCode:
+              type: string
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    WorkflowStatus:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: The ID of the order.
+        details:
+          type: object
+          properties:
+            order:
+              $ref: '#/components/schemas/OrderSummary'
+            payment:
+              $ref: '#/components/schemas/PaymentSummary'
+            shipping:
+              $ref: '#/components/schemas/ShippingSummary'

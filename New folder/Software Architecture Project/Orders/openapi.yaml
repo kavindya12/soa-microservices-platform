@@ -1,0 +1,129 @@
+openapi: 3.0.0
+info:
+  title: Orders Service API
+  version: 1.0.0
+  description: API for managing customer orders.
+servers:
+  - url: http://localhost:3000
+    description: Local Orders Service
+paths:
+  /:
+    get:
+      summary: Get service status
+      responses:
+        '200':
+          description: Orders Service API is running.
+  /orders:
+    post:
+      summary: Place a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Unique identifier for the order.
+                item:
+                  type: string
+                  description: Name of the item ordered.
+                quantity:
+                  type: integer
+                  description: Quantity of the item.
+                customerName:
+                  type: string
+                  description: Name of the customer.
+                shippingAddress:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+                    city:
+                      type: string
+                    zipCode:
+                      type: string
+                  required:
+                    - street
+                    - city
+                    - zipCode
+              required:
+                - id
+                - item
+                - quantity
+                - customerName
+                - shippingAddress
+      responses:
+        '200':
+          description: Order initiation request sent to Orchestrator.
+        '500':
+          description: Failed to connect to RabbitMQ.
+  /orders/{id}:
+    get:
+      summary: Get order details by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the order to retrieve.
+      responses:
+        '200':
+          description: Order details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found.
+        '500':
+          description: Internal Server Error.
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the order.
+        item:
+          type: string
+          description: Name of the item ordered.
+        quantity:
+          type: integer
+          description: Quantity of the item.
+        customerName:
+          type: string
+          description: Name of the customer.
+        shippingAddress:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            zipCode:
+              type: string
+          required:
+            - street
+            - city
+            - zipCode
+        status:
+          type: string
+          description: Current status of the order (e.g., pending, processed, shipped).
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the order was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the order was last updated.
+      required:
+        - id
+        - item
+        - quantity
+        - customerName
+        - shippingAddress
